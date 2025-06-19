@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Web Dev QuizMaster Pro</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="background-pattern"></div>
+  
+  <div class="app">
+    <!-- Header Section -->
+    <header class="header">
+      <div class="header-content">
+        <div class="logo">
+          <i class="fas fa-code"></i>
+          <h1 id="app-title">Web Dev QuizMaster</h1>
+        </div>
+        <div class="controls">
+          <div class="language-selector">
+            <i class="fas fa-globe"></i>
+            <select id="language-select" onchange="setLang(this.value)">
+              <option value="en">English</option>
+              <option value="ur">اردو</option>
+            </select>
+          </div>
+          <button id="theme-toggle" onclick="toggleTheme()">
+            <i class="fas fa-moon"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Difficulty Selection -->
+    <div class="difficulty-selection" id="difficulty-selection">
+      <div class="difficulty-content">
+        <h2 id="select-difficulty-title">Select Difficulty Level</h2>
+        <p id="select-difficulty-subtitle">Choose your challenge level and test your web development knowledge!</p>
+        
+        <div class="difficulty-grid">
+          <div class="difficulty-card" onclick="selectDifficulty('easy')">
+            <div class="difficulty-icon easy">
+              <i class="fas fa-seedling"></i>
+            </div>
+            <h3 id="easy-title">Easy</h3>
+            <p id="easy-desc">HTML, CSS basics, and fundamental concepts</p>
+            <div class="difficulty-stats">
+              <span><i class="fas fa-clock"></i> 30s per question</span>
+              <span><i class="fas fa-questions"></i> 10 questions</span>
+            </div>
+          </div>
+
+          <div class="difficulty-card" onclick="selectDifficulty('medium')">
+            <div class="difficulty-icon medium">
+              <i class="fas fa-tree"></i>
+            </div>
+            <h3 id="medium-title">Medium</h3>
+            <p id="medium-desc">JavaScript, frameworks, and intermediate topics</p>
+            <div class="difficulty-stats">
+              <span><i class="fas fa-clock"></i> 25s per question</span>
+              <span><i class="fas fa-questions"></i> 10 questions</span>
+            </div>
+          </div>
+
+          <div class="difficulty-card" onclick="selectDifficulty('hard')">
+            <div class="difficulty-icon hard">
+              <i class="fas fa-mountain"></i>
+            </div>
+            <h3 id="hard-title">Hard</h3>
+            <p id="hard-desc">Advanced concepts, algorithms, and best practices</p>
+            <div class="difficulty-stats">
+              <span><i class="fas fa-clock"></i> 20s per question</span>
+              <span><i class="fas fa-questions"></i> 10 questions</span>
+            </div>
+          </div>
+
+          <div class="difficulty-card" onclick="selectDifficulty('expert')">
+            <div class="difficulty-icon expert">
+              <i class="fas fa-rocket"></i>
+            </div>
+            <h3 id="expert-title">Expert</h3>
+            <p id="expert-desc">System design, architecture, and expert-level topics</p>
+            <div class="difficulty-stats">
+              <span><i class="fas fa-clock"></i> 15s per question</span>
+              <span><i class="fas fa-questions"></i> 10 questions</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Progress Section -->
+    <div class="progress-section" style="display: none;">
+      <div class="progress-info">
+        <div class="progress-left">
+          <span id="question-counter">Question 1 of 10</span>
+          <span id="current-difficulty" class="current-difficulty">Easy</span>
+        </div>
+        <div class="progress-right">
+          <span id="answered-count">Answered: 0/10</span>
+          <span id="score-display">Score: 0</span>
+        </div>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+    </div>
+
+    <!-- Quiz Navigation -->
+    <div class="quiz-nav" id="quiz-nav" style="display: none;">
+      <div class="nav-content">
+        <h4 id="nav-title">Question Navigation</h4>
+        <div class="question-grid" id="question-grid"></div>
+        <div class="nav-legend">
+          <div class="legend-item">
+            <span class="legend-dot answered"></span>
+            <span id="legend-answered">Answered</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot unanswered"></span>
+            <span id="legend-unanswered">Unanswered</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot current"></span>
+            <span id="legend-current">Current</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quiz Section -->
+    <main class="quiz-container" style="display: none;">
+      <div class="quiz">
+        <div class="question-section">
+          <h2 id="question">Question goes here</h2>
+          <div class="question-meta">
+            <span class="difficulty-badge" id="difficulty">Easy</span>
+            <span class="timer" id="timer">30s</span>
+          </div>
+        </div>
+        
+        <div class="answers-section">
+          <div id="answer-buttons"></div>
+        </div>
+        
+        <div class="quiz-actions">
+          <button id="hint-btn" onclick="showHint()">
+            <i class="fas fa-lightbulb"></i>
+            <span id="hint-text">Hint</span>
+          </button>
+          <div class="action-buttons">
+            <button id="skip-btn" onclick="skipQuestion()">
+              <i class="fas fa-forward"></i>
+              <span id="skip-text">Skip</span>
+            </button>
+            <button id="next-btn" style="display: none;">
+              <span id="next-text">Next</span>
+              <i class="fas fa-arrow-right"></i>
+            </button>
+            <button id="submit-btn" onclick="submitQuiz()" style="display: none;">
+              <i class="fas fa-check"></i>
+              <span id="submit-text">Submit Quiz</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Results Section -->
+    <div class="results-section" id="results-section" style="display: none;">
+      <div class="results-content">
+        <div class="results-icon">
+          <i class="fas fa-trophy"></i>
+        </div>
+        <h3 id="results-title">Quiz Complete!</h3>
+        <div class="difficulty-completed">
+          <span id="completed-difficulty">Easy</span> Level Completed!
+        </div>
+        <div class="score-breakdown">
+          <div class="score-circle">
+            <div class="score-number" id="final-score">0</div>
+            <div class="score-total">/ 10</div>
+          </div>
+        </div>
+        <div class="performance-stats">
+          <div class="stat">
+            <i class="fas fa-check-circle"></i>
+            <span id="correct-answers">0 Correct</span>
+          </div>
+          <div class="stat">
+            <i class="fas fa-times-circle"></i>
+            <span id="incorrect-answers">0 Incorrect</span>
+          </div>
+          <div class="stat">
+            <i class="fas fa-question-circle"></i>
+            <span id="skipped-answers">0 Skipped</span>
+          </div>
+          <div class="stat">
+            <i class="fas fa-percentage"></i>
+            <span id="accuracy">0% Accuracy</span>
+          </div>
+          <div class="stat">
+            <i class="fas fa-clock"></i>
+            <span id="avg-time">Avg: 0s</span>
+          </div>
+        </div>
+        <div class="results-actions">
+          <button id="restart-btn" onclick="restartCurrentLevel()">
+            <i class="fas fa-redo"></i>
+            <span id="restart-text">Try Again</span>
+          </button>
+          <button id="new-level-btn" onclick="showDifficultySelection()">
+            <i class="fas fa-layer-group"></i>
+            <span id="new-level-text">New Level</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confetti Canvas -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <script src="script.js"></script>
+</body>
+</html>
